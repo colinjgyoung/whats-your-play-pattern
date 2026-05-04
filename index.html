@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>What's Your Play Pattern? | nnherit</title>
+    <meta
+      name="description"
+      content="A 3-minute playful-professional profiler to discover your primary and secondary Play Pattern."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="brand-row">
+        <p class="brand">nnherit</p>
+      </header>
+
+      <section id="landing" class="panel panel--active" aria-labelledby="landing-title">
+        <h1 id="landing-title">What’s Your Play Pattern?</h1>
+        <p class="lead">
+          A 3-minute profiler for facilitators, educators, game designers, coaches,
+          consultants, and playful learning practitioners.
+        </p>
+        <p>
+          Answer 10 scenario-based questions to discover your <strong>primary</strong> and
+          <strong>secondary</strong> Play Pattern.
+        </p>
+        <button id="start-btn" class="btn btn--primary">Start profile</button>
+      </section>
+
+      <section id="quiz" class="panel" aria-live="polite" aria-labelledby="question-title">
+        <div class="progress-wrap" role="status">
+          <p id="progress-label">Question 1 of 10</p>
+          <div class="progress-track" aria-hidden="true">
+            <div id="progress-bar" class="progress-fill"></div>
+          </div>
+        </div>
+
+        <h2 id="question-title"></h2>
+        <p id="question-scenario" class="scenario"></p>
+        <form id="answers-form" class="answers"></form>
+        <div class="quiz-actions">
+          <button id="back-btn" class="btn btn--ghost" disabled>Back</button>
+          <button id="next-btn" class="btn btn--primary" disabled>Next</button>
+        </div>
+      </section>
+
+      <section id="result" class="panel" aria-labelledby="result-title">
+        <h2 id="result-title">Your Play Pattern</h2>
+
+        <article id="result-card" class="result-card">
+          <p class="result-kicker">Your primary pattern</p>
+          <h3 id="primary-name"></h3>
+          <p id="primary-summary" class="summary"></p>
+
+          <p class="result-kicker">Your secondary pattern</p>
+          <h4 id="secondary-name"></h4>
+
+          <div id="result-details"></div>
+        </article>
+
+        <p class="disclaimer" id="result-disclaimer"></p>
+        <p id="score-note" class="score-note"></p>
+
+        <div class="result-actions">
+          <button id="share-btn" class="btn btn--secondary">Share result</button>
+          <button id="restart-btn" class="btn btn--ghost">Retake profile</button>
+        </div>
+
+        <section class="email-capture" aria-labelledby="email-title">
+          <h3 id="email-title">Want the full 12-pattern field guide?</h3>
+          <p id="shared-cta-copy"></p>
+          <form onsubmit="return false" class="email-form">
+            <label for="email" class="sr-only">Email address</label>
+            <input id="email" type="email" placeholder="you@example.com" />
+            <button type="submit" class="btn btn--primary">Send me the field guide</button>
+          </form>
+          <a class="btn btn--link" href="https://nnherit.com" target="_blank" rel="noreferrer">
+            Explore nnherit playkits
+          </a>
+        </section>
+      </section>
+    </main>
+
+    <script src="patterns.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
