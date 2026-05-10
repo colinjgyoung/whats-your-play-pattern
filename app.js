@@ -145,20 +145,12 @@ function renderResult() {
   el("score-note").textContent = "Scoring: each answer gives +2 to one pattern and +1 to a second pattern. Ties are resolved by the most recently scored pattern.";
 
   el("share-btn").onclick = async () => {
-    const link = resultUrl();
-    const text = fullResultText(primary, secondary, link);
-
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: "What’s Your Play Pattern?", text, url: link });
-        return;
-      } catch (error) {
-        if (error.name === "AbortError") return;
-      }
+    const txt = `My Play Patterns: ${primary} (primary), ${secondary} (secondary).`;
+    if (navigator.share) await navigator.share({ title: "What’s Your Play Pattern?", text: txt });
+    else {
+      await navigator.clipboard.writeText(txt);
+      alert("Result summary copied to clipboard.");
     }
-
-    await copyText(text);
-    alert("Full result and direct result link copied to clipboard.");
   };
 }
 
@@ -174,13 +166,4 @@ el("back-btn").onclick = () => {
   state.index -= 1;
   renderQuestion();
 };
-el("restart-btn").onclick = () => {
-  const url = new URL(window.location.href);
-  url.searchParams.delete("answers");
-  url.hash = "";
-  window.location.href = url.toString();
-};
-
-el("field-guide-download").href = data.shared.fieldGuidePdfUrl;
-
-hydrateSharedAnswers();
+el("restart-btn").onclick = () => location.reload();
