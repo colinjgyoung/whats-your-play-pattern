@@ -211,17 +211,6 @@ summary:focus-visible {
   border: 1px solid #e2e2e2;
 }
 
-.email-form {
-  display: grid;
-  gap: 0.6rem;
-  margin: 0.8rem 0;
-}
-
-input[type="email"] {
-  padding: 0.75rem;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-}
 
 .sr-only {
   position: absolute;
@@ -237,7 +226,7 @@ input[type="email"] {
   .brand { font-size: 2.2rem; }
 }
 
-.email-capture,
+.field-guide-card,
 .big-cta {
   margin-top: 1rem;
   border: 1px solid var(--line);
@@ -246,19 +235,6 @@ input[type="email"] {
   background: #fff;
 }
 
-.form-status {
-  min-height: 1.3rem;
-  margin: 0.45rem 0 0;
-  font-weight: 700;
-  color: var(--deep-navy);
-}
-
-.form-note {
-  margin: 0.45rem 0 0;
-  color: var(--muted);
-  font-size: 0.88rem;
-  line-height: 1.45;
-}
 
 .big-cta {
   background:

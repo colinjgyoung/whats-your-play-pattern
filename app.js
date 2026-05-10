@@ -181,25 +181,6 @@ el("restart-btn").onclick = () => {
   window.location.href = url.toString();
 };
 
-el("email-form").addEventListener("submit", (event) => {
-  event.preventDefault();
-  const input = el("email");
-  const status = el("email-status");
-
-  if (!input.checkValidity()) {
-    status.textContent = "Please enter a valid email address first.";
-    input.focus();
-    return;
-  }
-
-  localStorage.setItem("playPatternFieldGuideRequest", JSON.stringify({ email: input.value, requestedAt: new Date().toISOString() }));
-  status.textContent = "Thanks — request confirmed. Opening the field guide now.";
-
-  window.setTimeout(() => {
-    window.open(data.shared.fieldGuidePdfUrl, "_blank", "noopener");
-  }, 650);
-});
-
 el("field-guide-download").href = data.shared.fieldGuidePdfUrl;
 
 hydrateSharedAnswers();

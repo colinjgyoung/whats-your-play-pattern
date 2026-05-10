@@ -8,7 +8,7 @@ A mobile-first, static web app that helps facilitators and playful practitioners
 - Calculates scores locally in the browser (no backend, no login, no database).
 - Shows a result page with full copy for all 12 Play Patterns.
 - Includes a screenshot/share-friendly result card.
-- Includes a static email-confirmation section that opens a hosted field guide PDF. It does not send email or collect addresses server-side unless you connect a third-party form/email service.
+- Includes a direct download link to the hosted field guide PDF; no email service or form is required.
 
 ## Project files
 
@@ -19,7 +19,7 @@ A mobile-first, static web app that helps facilitators and playful practitioners
   - shared CTA/disclaimer,
   - all questions/answers/scoring mappings.
 - `app.js` – app state, rendering, scoring, tie-break logic.
-- `field-guide.pdf` – downloadable branded 12-pattern field guide opened by the email confirmation flow.
+- `field-guide.pdf` – downloadable branded 12-pattern field guide linked from the result page.
 - `tools/generate_field_guide.py` – standard-library PDF generator that rebuilds `field-guide.pdf` from `patterns.js`.
 
 ## How to edit questions
@@ -89,16 +89,9 @@ When someone opens that link, the app rebuilds the same result page locally in t
 
 On mobile, the button opens the native share sheet when supported. On desktop, it copies a fuller result summary plus the direct result link to the clipboard.
 
-## Field guide PDF and email form setup
+## Field guide PDF setup
 
-The repository includes `field-guide.pdf`, a branded complete 12-pattern guide generated from the pattern copy in `patterns.js`.
-
-This app is still fully static, so GitHub Pages **cannot send emails or collect email addresses into a database by itself**. The current form:
-
-- validates that an email address was entered,
-- shows an on-page confirmation message,
-- stores the request only in the visitor’s own browser local storage,
-- opens the configured field guide PDF in a new tab.
+The repository includes `field-guide.pdf`, a branded complete 12-pattern guide generated from the pattern copy in `patterns.js`. The result page links directly to this PDF, so users can download it without entering an email address.
 
 To host the PDF on GitHub Pages:
 
@@ -115,8 +108,6 @@ If you want to put the PDF somewhere else, update this value in `patterns.js`:
 ```js
 fieldGuidePdfUrl: "field-guide.pdf"
 ```
-
-For real email collection or automated email delivery, connect the form to a static-friendly form service such as Formspree, Basin, Netlify Forms, ConvertKit, Mailchimp, or another email platform.
 
 
 ## Regenerate the field guide PDF
