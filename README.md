@@ -8,7 +8,7 @@ A mobile-first, static web app that helps facilitators and playful practitioners
 - Calculates scores locally in the browser (no backend, no login, no database).
 - Shows a result page with full copy for all 12 Play Patterns.
 - Includes a screenshot/share-friendly result card.
-- Includes a placeholder email-capture section (not connected to any service).
+- Includes a direct download link to the hosted field guide PDF; no email service or form is required.
 
 ## Project files
 
@@ -19,6 +19,8 @@ A mobile-first, static web app that helps facilitators and playful practitioners
   - shared CTA/disclaimer,
   - all questions/answers/scoring mappings.
 - `app.js` – app state, rendering, scoring, tie-break logic.
+- `field-guide.pdf` – downloadable branded 12-pattern field guide linked from the result page.
+- `tools/generate_field_guide.py` – standard-library PDF generator that rebuilds `field-guide.pdf` from `patterns.js`.
 
 ## How to edit questions
 

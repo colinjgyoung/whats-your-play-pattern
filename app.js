@@ -58,6 +58,71 @@ function topTwo() {
     .slice(0, 2);
 }
 
+function resultCode() {
+  return state.answers.map((answer) => (answer === null ? "x" : String(answer))).join("");
+}
+
+function resultUrl() {
+  const url = new URL(window.location.href);
+  url.searchParams.set("answers", resultCode());
+  url.hash = "result";
+  return url.toString();
+}
+
+function hydrateSharedAnswers() {
+  const params = new URLSearchParams(window.location.search);
+  const answerCode = params.get("answers");
+  if (!answerCode || answerCode.length !== data.questions.length || /[^0-2]/.test(answerCode)) return false;
+
+  const answers = [...answerCode].map(Number);
+  const isValid = answers.every((answer, index) => data.questions[index].options[answer]);
+  if (!isValid) return false;
+
+  state.answers = answers;
+  state.index = data.questions.length;
+  renderResult();
+  show("result");
+  return true;
+}
+
+function fullResultText(primary, secondary, resultLink) {
+  const p = data.patterns[primary];
+  return [
+    "What’s Your Play Pattern?",
+    "",
+    `Primary: ${primary}`,
+    p.summary,
+    "",
+    `Secondary: ${secondary}`,
+    "",
+    "Your strength:",
+    p.strength,
+    "",
+    "Try this next:",
+    p.next,
+    "",
+    "Read the full result and explore nnherit:",
+    resultLink,
+  ].join("\n");
+}
+
+async function copyText(text) {
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.setAttribute("readonly", "");
+  textarea.style.position = "fixed";
+  textarea.style.top = "-999px";
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand("copy");
+  textarea.remove();
+}
+
 function renderResult() {
   recomputeScores();
   const [primary, secondary] = topTwo();

@@ -14,8 +14,9 @@ window.PATTERN_APP_DATA = {
     "The Ripple Mapper": { summary: "You help people see consequences, second-order effects, and wider system impact.", description: "You naturally look beyond the first move. When a group makes a choice, you ask what it affects, who feels it, what it changes, what it triggers, and what might happen next.\n\nYou use maps, scenarios, cards, chains, clusters, and consequence prompts to help people see how one decision travels through a system.", strength: "You help groups make wiser choices by seeing beyond the immediate moment.", danger: "You may make the system feel so complex that people become cautious, slow, or overwhelmed.", next: "Ask: “If we make this move, what changes next, and who feels it first?”", pairings: "You work especially well with The Game Maker, who makes complexity playable, and The Pressure Keeper, who helps the group stay with uncomfortable consequences.", bridge: "nnherit playkits help groups map how behaviours, decisions, and tensions move through a wider system." }
   },
   shared: {
-    cta: "Enter your email and we’ll send you your result, the complete Play Pattern Field Guide, and a few practical prompts for using play with groups.",
-    disclaimer: "This is not a personality test or diagnostic tool. It is a playful reflection prompt designed to help you notice how you tend to use play in group settings."
+    cta: "Download the complete Play Pattern Field Guide PDF for all 12 patterns and practical prompts for using play with groups.",
+    disclaimer: "This is not a personality test or diagnostic tool. It is a playful reflection prompt designed to help you notice how you tend to use play in group settings.",
+    fieldGuidePdfUrl: "field-guide.pdf"
   },
   questions: [
     { q: "A team keeps repeating the same meeting conflict. You first...", options: [

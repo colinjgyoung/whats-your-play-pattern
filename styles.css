@@ -236,3 +236,44 @@ input[type="email"] {
   .panel { padding: 1.6rem; }
   .brand { font-size: 2.2rem; }
 }
+
+.field-guide-card,
+.big-cta {
+  margin-top: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 1rem;
+  background: #fff;
+}
+
+
+.big-cta {
+  background:
+    radial-gradient(circle at 10% 0%, rgba(255, 209, 0, 0.32) 0 60px, transparent 61px),
+    var(--trust-black);
+  color: var(--pure-white);
+  text-align: center;
+}
+
+.big-cta h3 {
+  max-width: 28rem;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: clamp(1.35rem, 5vw, 2rem);
+}
+
+.big-cta .result-kicker {
+  color: var(--heritage-yellow);
+}
+
+.big-cta .btn--primary {
+  margin-top: 0.35rem;
+}
+
+.btn--wide {
+  display: inline-flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 22rem;
+  text-decoration: none;
+}
