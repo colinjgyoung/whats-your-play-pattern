@@ -26,6 +26,8 @@ CHARCOAL = (0.20, 0.20, 0.20)
 MUTED = (0.34, 0.34, 0.34)
 YELLOW = (1.0, 0.82, 0.0)
 WHITE = (1.0, 1.0, 1.0)
+PALE_YELLOW = (1.0, 0.965, 0.72)
+PALE_GRAY = (0.955, 0.955, 0.94)
 
 
 def load_patterns() -> dict:
@@ -93,9 +95,9 @@ class PDF:
             out.extend(b"\nendobj\n")
         xref = len(out)
         out.extend(f"xref\n0 {len(self.objects) + 1}\n".encode())
-        out.extend(b"0000000000 65535 f \n")
+        out.extend(b"0000000000 65535 f\n")
         for offset in offsets[1:]:
-            out.extend(f"{offset:010d} 00000 n \n".encode())
+            out.extend(f"{offset:010d} 00000 n\n".encode())
         out.extend(
             b"trailer\n<< /Size %d /Root %d 0 R >>\nstartxref\n%d\n%%%%EOF\n"
             % (len(self.objects) + 1, catalog, xref)
@@ -122,8 +124,8 @@ class Page:
             + b"(" + pdf_escape(text) + b") Tj ET\n"
         )
 
-    def line(self, y: float, color: tuple[float, float, float] = YELLOW) -> None:
-        self.rect(MARGIN, y, PAGE_W - 2 * MARGIN, 3, color)
+    def line(self, y: float, color: tuple[float, float, float] = YELLOW, x: float = MARGIN, w: float | None = None, h: float = 3) -> None:
+        self.rect(x, y, PAGE_W - 2 * MARGIN if w is None else w, h, color)
 
     def bytes(self) -> bytes:
         return b"".join(self.commands)
@@ -171,14 +173,19 @@ class Guide:
         self.page.text(MARGIN, self.page.y, text, 11.5, "F2", BLACK)
         self.page.y -= 15
 
-    def paragraph(self, text: str, size: float = 9.8, width: int = 92, gap: float = 9, color: tuple[float, float, float] = CHARCOAL) -> None:
+    def text_block(self, x: float, text: str, size: float = 9.8, width: int = 92, gap: float = 9, color: tuple[float, float, float] = CHARCOAL, font: str = "F1") -> float:
         assert self.page is not None
+        start_y = self.page.y
         for para in text.split("\n\n"):
             for line in textwrap.wrap(para, width=width):
                 self.ensure(size + 7)
-                self.page.text(MARGIN, self.page.y, line, size, "F1", color)
+                self.page.text(x, self.page.y, line, size, font, color)
                 self.page.y -= size + 3.5
             self.page.y -= gap
+        return start_y - self.page.y
+
+    def paragraph(self, text: str, size: float = 9.8, width: int = 92, gap: float = 9, color: tuple[float, float, float] = CHARCOAL) -> None:
+        self.text_block(MARGIN, text, size=size, width=width, gap=gap, color=color)
 
     def bullet(self, text: str) -> None:
         assert self.page is not None
@@ -187,6 +194,45 @@ class Guide:
             prefix = "• " if i == 0 else "  "
             self.page.text(MARGIN + 8, self.page.y, prefix + line, 9.5, "F1", CHARCOAL)
             self.page.y -= 13
+
+    def pattern_index(self, patterns: dict) -> None:
+        assert self.page is not None
+        self.ensure(476)
+        col_w = 235
+        gap = 21
+        card_h = 68
+        row_gap = 10
+        start_y = self.page.y
+        names = list(patterns.keys())
+        for idx, name in enumerate(names, start=1):
+            col = 0 if idx <= 6 else 1
+            row = (idx - 1) % 6
+            x = MARGIN + col * (col_w + gap)
+            top = start_y - row * (card_h + row_gap)
+            bottom = top - card_h
+            self.page.rect(x, bottom, col_w, card_h, PALE_GRAY if row % 2 else PALE_YELLOW)
+            self.page.rect(x, top - 9, 34, 9, YELLOW)
+            self.page.text(x + 10, top - 25, f"{idx}.", 12.5, "F2", BLACK)
+            for line_no, line in enumerate(textwrap.wrap(name, width=27)[:2]):
+                self.page.text(x + 38, top - 21 - line_no * 12, line, 9.8, "F2", BLACK)
+            summary_y = top - 46
+            for line_no, line in enumerate(textwrap.wrap(patterns[name]["summary"], width=40)[:2]):
+                self.page.text(x + 12, summary_y - line_no * 10.5, line, 8.4, "F1", CHARCOAL)
+        self.page.y = start_y - 6 * (card_h + row_gap) + row_gap - 12
+
+    def accent_rule(self) -> None:
+        assert self.page is not None
+        self.ensure(20)
+        self.page.line(self.page.y - 2, x=MARGIN, w=150, h=5)
+        self.page.y -= 22
+
+    def pattern_section(self, label: str, text: str) -> None:
+        assert self.page is not None
+        self.ensure(48)
+        self.page.y -= 4
+        self.subheading(label)
+        self.paragraph(text, width=88, gap=10)
+        self.page.y -= 4
 
     def button_link(self, label: str, url: str) -> None:
         assert self.page is not None
@@ -235,9 +281,8 @@ def build() -> None:
         "your default move. Your secondary pattern may describe the support move you often bring with it.",
         width=88,
     )
-    guide.subheading("The 12 patterns")
-    for i, name in enumerate(patterns.keys(), start=1):
-        guide.bullet(f"{i}. {name} — {patterns[name]['summary']}")
+    guide.subheading("The 12 patterns at a glance")
+    guide.pattern_index(patterns)
     guide.paragraph(
         "Tip: after reading your own pattern, read the two patterns listed under Good pairings. "
         "Those combinations often reveal the next useful stretch for your practice.",
@@ -246,9 +291,9 @@ def build() -> None:
 
     for i, (name, pattern) in enumerate(patterns.items(), start=1):
         guide.begin_page(f"{i}. {name}")
-        guide.paragraph(pattern["summary"], size=11.2, width=76, color=BLACK)
-        guide.page.line(guide.page.y + 3)
-        guide.paragraph(pattern["description"], width=88)
+        guide.accent_rule()
+        guide.paragraph(pattern["summary"], size=11.2, width=76, gap=14, color=BLACK)
+        guide.paragraph(pattern["description"], width=88, gap=14)
         for label, key in [
             ("Your strength", "strength"),
             ("Your danger zone", "danger"),
@@ -256,8 +301,7 @@ def build() -> None:
             ("Good pairings", "pairings"),
             ("nnherit bridge", "bridge"),
         ]:
-            guide.subheading(label)
-            guide.paragraph(pattern[key], width=88, gap=6)
+            guide.pattern_section(label, pattern[key])
 
     guide.begin_page("Keep playing with purpose")
     guide.paragraph(
